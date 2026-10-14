@@ -521,8 +521,8 @@ a.p-tile:hover { transform: translateY(-4px); }
       var x = lerp(q.s[0] * vw, q.a[0] * k, t);
       var y = lerp(q.s[1] * vh, q.a[1] * k + oy, t);
       var rot = lerp(q.s[2], q.a[2], t);
-      // Small screens: keep the scattered shapes big enough to read as a playful backdrop.
-      var sc = lerp(q.s[3] * Math.max(1, 0.55 / k), 1, t);
+      // Narrow screens: shrink the scattered parts so they frame the headline instead of covering it.
+      var sc = lerp(q.s[3] * clamp(vw / 1100, 0.5, 1), 1, t);
       var el = els[q.id];
       el.style.width = q.w * k + "px"; el.style.height = q.h * k + "px";
       el.style.transform = "translate(-50%,-50%) translate(" + x + "px," + y + "px) rotate(" + rot + "deg) scale(" + sc + ")";
