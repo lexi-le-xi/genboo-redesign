@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When Students Build a Robot — Genboo</title>
+<meta name="description" content="What happens when four high-school students take a humanoid robot from a box of parts to its first step, and learn every subject it takes along the way.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/v2.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="head">
+  <div class="wrap">
+    <a class="logo" href="index.html">Genboo <span>进步</span></a>
+    <nav class="menu">
+      <a href="#story">Story</a>
+      <a href="#build">The build</a>
+      <a href="program.html">Program</a>
+      <a class="btn btn-dark" href="apply.html">Apply</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>When students build a&nbsp;robot</h1>
+        <p class="sub">What happens when four high-school students take a humanoid from a box of parts to its first step, and learn every subject it takes along the way.</p>
+        <div class="ctas">
+          <a class="btn btn-dark btn-lg" href="apply.html">Apply for Cohort 03</a>
+          <a class="btn btn-line btn-lg" href="#build">Watch it come together ↓</a>
+        </div>
+      </div>
+      <div class="mosaic" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- OPENING ESSAY -->
+  <section id="story" class="rule">
+    <div class="wrap">
+      <div class="opening">
+        <aside><span class="label">The beginning</span></aside>
+        <div class="essay fade">
+          <p>For most students, math, physics, and coding arrive as separate classes, each with its own worksheet and its own test. Each one makes sense. Together, they rarely add up to anything a student actually cares about.</p>
+          <p>Yuanzhe Dong saw this up close. He builds AI at NVIDIA, and he had tried the usual tutoring for his own son. The lessons didn’t stick.</p>
+          <p>So he tried something different. Instead of teaching subjects, he started building a robot <em>with</em> the students, and suddenly the subjects had a reason to exist. Geometry was how a knee bends. Circuits were why a joint wouldn’t move. Code was how you make it stand up.</p>
+          <p>In 2025, a few parent friends joined in, and a garage project in Menlo Park became a program. This is what a team of four builds in eight weeks, and everything they learn on the way.</p>
+        </div>
+      </div>
+      <div class="strip fade">
+        <figure><img src="https://humanoid.genboo.com/assets/img/team-of-four-800.webp" alt="Four students holding up the partly assembled upper body of their robot" loading="lazy"></figure>
+        <figure><img src="https://humanoid.genboo.com/assets/img/student-assembly-hands-1200.webp" alt="Hands assembling the torso and arm actuators of a humanoid robot" loading="lazy"></figure>
+        <figure><img src="https://humanoid.genboo.com/assets/img/robots-three-800.webp" alt="Three finished student robots with team nameplates" loading="lazy"></figure>
+      </div>
+      <p class="strip-cap">Cohort students in the Menlo Park lab. Faces blurred for privacy.</p>
+    </div>
+  </section>
+
+  <!-- SCROLLYTELLING: the robot builds up, one subject at a time -->
+  <section id="build" class="rule" style="padding-bottom:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label">Eight weeks, one robot</span>
+          <h2 style="margin-top:16px">What it takes to make a robot stand up</h2>
+        </div>
+        <p>Every layer of the robot is a different field of engineering. Scroll, and watch them stack up in the order students meet them.</p>
+      </div>
+
+      <div class="scrolly">
+        <div class="scrolly-fig">
+          <div class="fig-card">
+            <svg id="robot" viewBox="0 0 420 548" role="img" aria-label="A humanoid robot diagram that gains a new layer at each step: body, wiring, code, simulation, learning, and team">
+              <style>
+                #robot .part { fill: var(--bg); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+                #robot .pupil { fill: var(--ink); }
+                #robot .floor { stroke: var(--ink); stroke-opacity: .25; stroke-width: 1.5; }
+                #robot .wire { fill: none; stroke: var(--kraft); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+                #robot .servo { fill: var(--kraft); }
+                #robot .elec { fill: var(--manilla); stroke: var(--kraft); stroke-width: 2; }
+                #robot .code-box { fill: var(--bg); stroke: var(--sky); stroke-width: 2; }
+                #robot .code-ln { fill: none; stroke: var(--sky); stroke-width: 1.6; stroke-dasharray: 3 4; }
+                #robot .mono { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--ink); }
+                #robot .mono-s { font-family: "JetBrains Mono", monospace; font-size: 8.5px; letter-spacing: .08em; fill: var(--ink-3); }
+                #robot .sim-grid { stroke: var(--olive); stroke-opacity: .55; stroke-width: 1; fill: none; }
+                #robot .ghost * { fill: none !important; stroke: var(--olive) !important; stroke-width: 4 !important; stroke-dasharray: 8 7 !important; stroke-dashoffset: 0 !important; }
+                #robot .rw-box { fill: var(--bg); stroke: var(--fig); stroke-width: 2; }
+                #robot .rw-line { fill: none; stroke: var(--fig); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+                #robot .motion { fill: none; stroke: var(--fig); stroke-width: 2; stroke-linecap: round; }
+                #robot .person { fill: none; stroke: var(--clay-deep); stroke-width: 2.4; stroke-linecap: round; }
+                #robot .person-h { fill: var(--clay); }
+              </style>
+
+              <!-- 4 · simulation twin (behind) -->
+              <g class="layer" data-layer="4">
+                <path class="sim-grid" d="M318 474 L410 474 M322 462 L406 462 M327 450 L401 450 M318 474 L327 450 M341 474 L345 450 M364 474 L364 450 M387 474 L383 450 M410 474 L401 450"/>
+                <g id="ghost-holder" class="ghost" transform="translate(296 288) scale(.37)"></g>
+                <text class="mono-s" x="322" y="280" style="fill:var(--olive)">SIM TWIN</text>
+              </g>
+
+              <!-- 1 · mechanical body -->
+              <g class="layer l-body" data-layer="1">
+                <line class="floor" x1="80" y1="480" x2="320" y2="480"/>
+                <g id="body-geo">
+                  <rect class="part draw fillin" pathLength="1" x="199" y="120" width="22" height="16" rx="3"/>
+                  <rect class="part draw fillin" pathLength="1" x="150" y="134" width="120" height="132" rx="14"/>
+                  <rect class="part draw fillin" pathLength="1" x="160" y="44" width="100" height="76" rx="16"/>
+                  <circle class="part draw" pathLength="1" cx="187" cy="82" r="14"/>
+                  <circle class="part draw" pathLength="1" cx="233" cy="82" r="14"/>
+                  <circle class="pupil fillin" cx="187" cy="82" r="5"/>
+                  <circle class="pupil fillin" cx="233" cy="82" r="5"/>
+                  <!-- left arm -->
+                  <rect class="part draw fillin" pathLength="1" x="126" y="162" width="26" height="64" rx="10"/>
+                  <rect class="part draw fillin" pathLength="1" x="126" y="240" width="26" height="58" rx="10"/>
+                  <circle class="part draw fillin" pathLength="1" cx="139" cy="152" r="10"/>
+                  <circle class="part draw fillin" pathLength="1" cx="139" cy="233" r="8"/>
+                  <circle class="part draw fillin" pathLength="1" cx="139" cy="308" r="11"/>
+                  <!-- right arm -->
+                  <rect class="part draw fillin" pathLength="1" x="268" y="162" width="26" height="64" rx="10"/>
+                  <rect class="part draw fillin" pathLength="1" x="268" y="240" width="26" height="58" rx="10"/>
+                  <circle class="part draw fillin" pathLength="1" cx="281" cy="152" r="10"/>
+                  <circle class="part draw fillin" pathLength="1" cx="281" cy="233" r="8"/>
+                  <circle class="part draw fillin" pathLength="1" cx="281" cy="308" r="11"/>
+                  <!-- left leg -->
+                  <rect class="part draw fillin" pathLength="1" x="168" y="286" width="28" height="74" rx="10"/>
+                  <rect class="part draw fillin" pathLength="1" x="168" y="376" width="28" height="72" rx="10"/>
+                  <circle class="part draw fillin" pathLength="1" cx="182" cy="276" r="9"/>
+                  <circle class="part draw fillin" pathLength="1" cx="182" cy="367" r="9"/>
+                  <rect class="part draw fillin" pathLength="1" x="158" y="458" width="50" height="18" rx="6"/>
+                  <!-- right leg (steps forward in the learning stage) -->
+                  <g class="leg-r">
+                    <rect class="part draw fillin" pathLength="1" x="224" y="286" width="28" height="74" rx="10"/>
+                    <rect class="part draw fillin" pathLength="1" x="224" y="376" width="28" height="72" rx="10"/>
+                    <circle class="part draw fillin" pathLength="1" cx="238" cy="276" r="9"/>
+                    <circle class="part draw fillin" pathLength="1" cx="238" cy="367" r="9"/>
+                    <rect class="part draw fillin" pathLength="1" x="214" y="458" width="50" height="18" rx="6"/>
+                    <g class="layer" data-layer="2">
+                      <path class="wire flow" d="M238 286 V452"/>
+                      <circle class="servo pulse" cx="238" cy="276" r="4"/>
+                      <circle class="servo pulse" cx="238" cy="367" r="4"/>
+                    </g>
+                  </g>
+                </g>
+              </g>
+
+              <!-- 2 · electrical -->
+              <g class="layer" data-layer="2">
+                <path class="wire flow" d="M210 150 V104 M182 166 H139 V300 M238 166 H281 V300 M196 226 V262 H182 V452 M224 226 V262 H238"/>
+                <rect class="elec" x="180" y="146" width="60" height="32" rx="4"/>
+                <text class="mono-s" x="187" y="166" style="fill:#8a5a2f">COMPUTER</text>
+                <rect class="elec" x="184" y="196" width="52" height="30" rx="4"/>
+                <rect class="elec" x="205" y="191" width="10" height="5" rx="1"/>
+                <text class="mono-s" x="191" y="215" style="fill:#8a5a2f">BATTERY</text>
+                <rect class="elec" x="200" y="236" width="20" height="14" rx="2"/>
+                <circle class="servo pulse" cx="139" cy="152" r="4"/>
+                <circle class="servo pulse" cx="139" cy="233" r="4"/>
+                <circle class="servo pulse" cx="281" cy="152" r="4"/>
+                <circle class="servo pulse" cx="281" cy="233" r="4"/>
+                <circle class="servo pulse" cx="182" cy="276" r="4"/>
+                <circle class="servo pulse" cx="182" cy="367" r="4"/>
+              </g>
+
+              <!-- 3 · software & control -->
+              <g class="layer" data-layer="3">
+                <rect class="code-box" x="10" y="34" width="132" height="92" rx="8"/>
+                <circle cx="22" cy="46" r="2.5" style="fill:var(--sky)"/><circle cx="31" cy="46" r="2.5" style="fill:var(--sky)"/><circle cx="40" cy="46" r="2.5" style="fill:var(--sky)"/>
+                <text class="mono" x="20" y="68">&gt; move(j3, 10°)</text>
+                <text class="mono" x="20" y="84" style="fill:var(--ink-3)">cmd  10.0°</text>
+                <text class="mono" x="20" y="98" style="fill:var(--ink-3)">act   9.4°</text>
+                <text class="mono" x="20" y="114" style="fill:var(--clay-deep)">Δ 0.6° … why?</text>
+                <path class="code-ln" d="M76 126 C 90 250, 120 340, 166 365"/>
+                <circle cx="182" cy="367" r="16" style="fill:none;stroke:var(--sky);stroke-width:2"/>
+              </g>
+
+              <!-- 5 · learning -->
+              <g class="layer" data-layer="5">
+                <rect class="rw-box" x="300" y="34" width="110" height="92" rx="8"/>
+                <text class="mono-s" x="312" y="52">REWARD</text>
+                <path d="M312 112 H398 M312 112 V60" style="stroke:var(--ink-3);stroke-width:1;fill:none"/>
+                <path class="rw-line" d="M314 108 L326 104 L334 107 L344 96 L352 99 L362 84 L370 87 L380 72 L396 64"/>
+                <path class="motion" d="M282 430 q 14 -6 18 -20 M292 446 q 12 -4 16 -16"/>
+              </g>
+
+              <!-- 6 · the team -->
+              <g class="layer" data-layer="6">
+                <g transform="translate(118 0)"><circle class="person-h" cx="0" cy="508" r="9"/><path class="person" d="M-16 544 Q0 516 16 544"/></g>
+                <g transform="translate(172 0)"><circle class="person-h" cx="0" cy="508" r="9"/><path class="person" d="M-16 544 Q0 516 16 544"/></g>
+                <g transform="translate(248 0)"><circle class="person-h" cx="0" cy="508" r="9"/><path class="person" d="M-16 544 Q0 516 16 544"/></g>
+                <g transform="translate(302 0)"><circle class="person-h" cx="0" cy="508" r="9"/><path class="person" d="M-16 544 Q0 516 16 544"/></g>
+              </g>
+            </svg>
+            <div class="fig-legend" aria-hidden="true">
+              <span data-layer="1" style="color:var(--clay)"><i></i><b style="font-weight:500;color:var(--ink-3)">Mechanical</b></span>
+              <span data-layer="2" style="color:var(--kraft)"><i></i><b style="font-weight:500;color:var(--ink-3)">Electrical</b></span>
+              <span data-layer="3" style="color:var(--sky)"><i></i><b style="font-weight:500;color:var(--ink-3)">Software</b></span>
+              <span data-layer="4" style="color:var(--olive)"><i></i><b style="font-weight:500;color:var(--ink-3)">Simulation</b></span>
+              <span data-layer="5" style="color:var(--fig)"><i></i><b style="font-weight:500;color:var(--ink-3)">AI</b></span>
+              <span data-layer="6" style="color:var(--clay-deep)"><i></i><b style="font-weight:500;color:var(--ink-3)">Teamwork</b></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="steps">
+          <div class="step" data-step="1">
+            <span class="label"><i style="background:var(--clay)"></i>Weeks 1–3</span>
+            <h3>A body</h3>
+            <p>It starts as a box of 3D-printed parts and servo motors. Students build one limb first, because one limb teaches almost everything: joints, alignment, fasteners, torque. Then arms, legs, torso, and head.</p>
+            <p class="learns"><b>Learns</b>Mechanical engineering, reading assembly drawings, degrees of freedom.</p>
+          </div>
+          <div class="step" data-step="2">
+            <span class="label"><i style="background:var(--kraft)"></i>Week 4</span>
+            <h3>Nerves</h3>
+            <p>A power system, an onboard computer, a servo bus, a motion sensor. Every wire is labeled and checked with a multimeter before anything turns on, because bad wiring beats good code every time.</p>
+            <p class="learns"><b>Learns</b>Circuits, power, sensors, electrical safety.</p>
+          </div>
+          <div class="step" data-step="3">
+            <span class="label"><i style="background:var(--sky)"></i>Weeks 5–6</span>
+            <h3>Reflexes</h3>
+            <p>Power on, give every servo an ID, calibrate every joint. Then the first real program: move joint 3 by 10 degrees. It doesn’t land exactly on 10. Explaining why is the lesson.</p>
+            <p class="learns"><b>Learns</b>Linux, Python, logging, the gap between a command and reality.</p>
+          </div>
+          <div class="step" data-step="4">
+            <span class="label"><i style="background:var(--olive)"></i>Week 7</span>
+            <h3>A twin</h3>
+            <p>The same robot, rebuilt in the MuJoCo physics simulator. Students run one motion in both worlds and compare. A simulation is a controlled approximation of reality, and they learn exactly where it’s wrong.</p>
+            <p class="learns"><b>Learns</b>Physics simulation, open- vs. closed-loop control, keyframe motion.</p>
+          </div>
+          <div class="step" data-step="5">
+            <span class="label"><i style="background:var(--fig)"></i>Week 8</span>
+            <h3>Learning</h3>
+            <p>Only now, AI. What is a policy? A reward? Students watch a policy train in simulation, change one reward, and see what the robot does differently. AI sits on top of everything they just built, not in place of it.</p>
+            <p class="learns"><b>Learns</b>Reinforcement learning: policies, rewards, observations, actions.</p>
+          </div>
+          <div class="step" data-step="6">
+            <span class="label"><i style="background:var(--clay-deep)"></i>All eight weeks</span>
+            <h3>Four people</h3>
+            <p>None of it happens alone. Four students share one robot, split into sub-teams, rotate between operating and checking, and stand up together at the final showcase to explain what worked, and what didn’t.</p>
+            <p class="learns"><b>Learns</b>Collaboration, engineering notebooks, presenting to an audience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:clamp(40px,6vw,72px)">
+    <div class="wrap">
+      <p class="after-scrolly fade">By week eight, you’ll have touched mechanical engineering, electronics, programming, control, simulation, and AI. <em>Not as six classes. As one machine that needed all of them.</em></p>
+      <p class="fade" style="margin-top:28px"><a class="btn btn-line" href="program.html">See the full week-by-week program →</a></p>
+    </div>
+  </section>
+
+  <!-- WHY: three numbered verbs -->
+  <section class="rule">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label">Why it matters</span>
+          <h2 style="margin-top:16px">What a robot teaches that a class can’t</h2>
+        </div>
+        <p>The robot is the vehicle. These three things are what we actually hope you walk away with.</p>
+      </div>
+      <div class="whys">
+        <article class="why fade">
+          <span class="tag">#1 OWN</span>
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 220 120"><rect x="10" y="60" width="54" height="44" rx="4" fill="var(--oat)" stroke="var(--kraft)" stroke-width="2"/><path d="M10 60 l12 -14 h54 l-12 14" fill="none" stroke="var(--kraft)" stroke-width="2"/><path d="M80 82 H128" stroke="var(--ink-3)" stroke-width="2" stroke-dasharray="4 5"/><path d="M124 76 l8 6 -8 6" fill="none" stroke="var(--ink-3)" stroke-width="2"/><rect x="152" y="20" width="44" height="34" rx="8" fill="var(--clay)"/><circle cx="166" cy="37" r="5" fill="var(--bg)"/><circle cx="182" cy="37" r="5" fill="var(--bg)"/><rect x="158" y="58" width="32" height="34" rx="6" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M166 92 v18 M182 92 v18" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/></svg>
+          </div>
+          <h3>A project of their own</h3>
+          <p>Most schoolwork, as Paul Graham puts it, is neither a project nor one’s own. Here, students take something from nothing to working and own every failure and fix on the way. Once you’ve gone from zero to one, you know you can do it again.</p>
+          <p class="src">From a box of parts to first motion.</p>
+        </article>
+        <article class="why fade">
+          <span class="tag">#2 WONDER</span>
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 220 120"><path d="M14 104 C 60 100, 90 90, 112 66 S 160 18, 206 12" fill="none" stroke="var(--sky)" stroke-width="2.4"/><circle cx="40" cy="101" r="6" fill="var(--clay)"/><circle cx="86" cy="88" r="6" fill="var(--kraft)"/><circle cx="128" cy="50" r="6" fill="var(--olive)"/><circle cx="178" cy="20" r="6" fill="var(--fig)"/><path d="M14 112 H210" stroke="var(--line-2)" stroke-width="1"/></svg>
+          </div>
+          <h3>Curiosity that compounds</h3>
+          <p>When AI can explain anything on demand, knowing things is cheap. <em>Wanting</em> to know is rare. Nobody has to assign the reading on torque when your robot’s knee keeps buckling. That pull is the engine of everything you’ll go on to teach yourself.</p>
+          <p class="src">Mechanics → electronics → control → AI.</p>
+        </article>
+        <article class="why fade">
+          <span class="tag">#3 TOGETHER</span>
+          <div class="art" aria-hidden="true">
+            <svg viewBox="0 0 220 120"><rect x="88" y="38" width="44" height="44" rx="8" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="102" cy="56" r="4" fill="var(--ink)"/><circle cx="118" cy="56" r="4" fill="var(--ink)"/><g fill="var(--clay)"><circle cx="40" cy="30" r="10"/><circle cx="180" cy="30" r="10"/><circle cx="40" cy="92" r="10"/><circle cx="180" cy="92" r="10"/></g><path d="M52 34 L86 50 M168 34 L134 50 M52 88 L86 72 M168 88 L134 72" stroke="var(--clay-deep)" stroke-width="2" stroke-dasharray="3 4"/></svg>
+          </div>
+          <h3>Four people, one robot</h3>
+          <p>No one builds a humanoid alone. Teams split into sub-teams, rotate roles, and debug together. Each keeps their own engineering notebook, so the robot is shared but the understanding is personal.</p>
+          <p class="src">One mentor for every team of four.</p>
+        </article>
+      </div>
+      <figure class="quote fade">
+        <blockquote>“As different from ordinary work as skating is from walking.”</blockquote>
+        <cite>Paul Graham, on working on a project of your own · <a href="https://paulgraham.com/own.html" target="_blank" rel="noopener">read the essay ↗</a></cite>
+      </figure>
+    </div>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section class="rule">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="label">The details</span>
+          <h2 style="margin-top:16px">Small, hands-on, and real</h2>
+        </div>
+        <p>A deliberately small cohort in an in-person lab in Menlo Park. Hardware and lab space set the limit.</p>
+      </div>
+      <div class="nums fade">
+        <div><b>8</b><span>weekly sessions, three hours each</span></div>
+        <div><b>4</b><span>students build one robot together</span></div>
+        <div><b>1:4</b><span>one mentor for every team</span></div>
+        <div><b>0</b><span>robotics experience required</span></div>
+      </div>
+      <div class="refs fade">
+        <a href="https://arxiv.org/abs/2609.25674" target="_blank" rel="noopener"><strong>Our curriculum is described in a peer-reviewed paper, accepted at IEEE TALE 2026</strong><span>Paper ↗</span></a>
+        <a href="https://toddlerbot.github.io/" target="_blank" rel="noopener"><strong>Students build ToddlerBot, an open-source humanoid from Stanford researchers</strong><span>Platform ↗</span></a>
+        <a href="https://online.stanford.edu/learner-stories/sharing-his-passion-robotics-next-generation" target="_blank" rel="noopener"><strong>Stanford Online on our founder: sharing a passion for robotics with the next generation</strong><span>Story ↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section class="rule">
+    <div class="wrap founder">
+      <img class="fade" src="https://humanoid.genboo.com/assets/img/students-testing-team-1200.webp" alt="Students running code on a laptop next to two humanoid robots on test stands" loading="lazy">
+      <div class="fade">
+        <span class="label">Who’s behind it</span>
+        <h2 style="margin-top:16px">Started by a parent who builds AI for a living</h2>
+        <p style="margin-top:22px;color:var(--ink-2);font-size:1.08rem;max-width:32em">Yuanzhe Dong trains large AI models at NVIDIA and studied both AI and mechanical engineering at Stanford, so he could build a robot from scratch himself. Now he teaches high-school students to do the same, with a few fellow parents and a mentor for every team.</p>
+        <div class="facts">
+          <div><span class="k">Today</span><span>Senior Deep Learning Algorithm Engineer, NVIDIA</span></div>
+          <div><span class="k">Before</span><span>Machine learning engineer, LandingAI (autonomous tractors)</span></div>
+          <div><span class="k">Training</span><span>Stanford AI Graduate Certificate · M.S. Mechanical Engineering (in progress)</span></div>
+          <div><span class="k">Since</span><span>Summer 2025, Menlo Park</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="dark">
+    <div class="wrap cta-final">
+      <div>
+        <span class="label">Cohort 03 · Rolling review</span>
+        <h2 style="margin-top:18px">Give them a project of their own.</h2>
+      </div>
+      <div>
+        <p>Open to students in grades 9–12. No robotics experience needed. Need-based scholarships are available, and parents can apply on a student’s behalf.</p>
+        <div class="ctas">
+          <a class="btn btn-clay btn-lg" href="apply.html">Apply for Cohort 03</a>
+          <a class="btn btn-line btn-lg" href="program.html">See the program</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Genboo · Menlo Park, California</span>
+    <nav><a href="program.html">Program</a><a href="apply.html">Apply</a><a href="apply.html#faq">FAQ</a><a href="mailto:hello@genboo.com">hello@genboo.com</a></nav>
+  </div>
+</footer>
+
+<script>
+  // Clone the robot's body as a dashed "simulation twin".
+  (function () {
+    var src = document.getElementById("body-geo"), dst = document.getElementById("ghost-holder");
+    if (!src || !dst) return;
+    var c = src.cloneNode(true);
+    c.removeAttribute("id");
+    c.querySelectorAll("*").forEach(function (n) { n.removeAttribute("class"); n.removeAttribute("pathLength"); });
+    c.querySelectorAll("[data-layer]").forEach(function (n) { n.remove(); });
+    dst.appendChild(c);
+  })();
+</script>
+<script src="assets/v2.js"></script>
+<a href="https://humanoid.genboo.com/" style="position:fixed;left:12px;bottom:12px;z-index:9999;font:500 12px/1 system-ui,sans-serif;background:#1f1f1f;color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;opacity:.85">Design concept · not the official Genboo site ↗</a>
+</body>
+</html>

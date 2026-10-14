@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply — Genboo</title>
+<meta name="description" content="Apply for Cohort 03: grades 9–12, no robotics experience needed, rolling review, need-based scholarships.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/v2.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="head">
+  <div class="wrap">
+    <a class="logo" href="index.html">Genboo <span>进步</span></a>
+    <nav class="menu">
+      <a href="index.html#story">Story</a>
+      <a href="index.html#build">The build</a>
+      <a href="program.html">Program</a>
+      <a class="btn btn-dark" href="apply.html" aria-current="page">Apply</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-title" style="padding-bottom:clamp(72px,10vw,120px)">
+    <div class="wrap apply">
+      <div>
+        <span class="label">Apply · Cohort 03</span>
+        <h1 style="margin-top:18px;font-size:clamp(2.6rem,5.6vw,4.4rem)">Curious beats experienced</h1>
+        <p class="sub">Cohort 03 is small, because hardware and lab space set the limit. We read every application, looking for students who want to understand how things work.</p>
+        <div class="facts-list">
+          <div><span class="k">Who</span><span>Current high-school students, grades 9–12</span></div>
+          <div><span class="k">Experience</span><span>None needed</span></div>
+          <div><span class="k">Where</span><span>In person, Menlo Park, CA</span></div>
+          <div><span class="k">When</span><span>8 weekly sessions, 3 hours each. Dates shared with applicants.</span></div>
+          <div><span class="k">Cost</span><span>Discussed at the interview. Need-based scholarships available.</span></div>
+          <div><span class="k">Review</span><span>Rolling. We reply within 5 business days.</span></div>
+        </div>
+      </div>
+
+      <form class="f" novalidate>
+        <div>
+          <h2 style="font-size:2rem">Start your application</h2>
+          <p style="margin-top:6px;color:var(--ink-3);font-size:.92rem">About five minutes. Parents are welcome to fill it in.</p>
+        </div>
+        <fieldset>
+          <legend>I’m filling this out as a</legend>
+          <div class="seg">
+            <label><input type="radio" name="role" value="student" checked> Student</label>
+            <label><input type="radio" name="role" value="parent"> Parent or guardian</label>
+          </div>
+        </fieldset>
+        <div><label for="n">Student’s full name</label><input id="n" name="name" autocomplete="name" required></div>
+        <div><label for="e">Contact email</label><input id="e" name="email" type="email" autocomplete="email" required></div>
+        <div class="two">
+          <div><label for="s">School</label><input id="s" name="school" required></div>
+          <div><label for="g">Current grade</label><select id="g" name="grade" required><option value="">Select…</option><option>9</option><option>10</option><option>11</option><option>12</option><option>Other</option></select></div>
+        </div>
+        <div><label for="p">Something you’ve built that you’re proud of <span class="opt">· optional</span></label><textarea id="p" name="proud" placeholder="A school project, code you wrote, something you took apart. A link is fine."></textarea></div>
+        <button class="btn btn-dark btn-lg" type="submit" style="justify-content:center">Submit application</button>
+        <div class="done">
+          <h2 style="font-size:2rem">This is a design preview.</h2>
+          <p style="margin-top:10px;color:var(--ink-2)">Nothing was sent. To apply for real, please use the official site: <a href="https://humanoid.genboo.com/#apply">humanoid.genboo.com</a>.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="rule" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="label">FAQ</span><h2 style="margin-top:16px">Questions parents ask</h2></div></div>
+      <div class="qa">
+        <details><summary>I’ve never built a robot. Is that OK?</summary><p>Yes. The program starts with lab safety and the robot as a system, and every step has a clear success check before the next one. Curiosity matters more than background.</p></details>
+        <details><summary>Why a humanoid, not a simpler kit?</summary><p>A humanoid needs every discipline at once: mechanics to stand, electronics to power on, software to move, AI to move on its own. We use ToddlerBot, an open-source humanoid from Stanford researchers. It’s small and affordable, and its parts can be bought or 3D-printed.</p></details>
+        <details><summary>What does it cost?</summary><p>Fees are discussed during the interview, and need-based scholarships are available.</p></details>
+        <details><summary>Do students keep the robot?</summary><p><em>[To confirm with the Genboo team.]</em></p></details>
+        <details><summary>What comes after the eight weeks?</summary><p>Students who want to go deeper can ask about the 22-week research track. <a href="program.html#long-track">Learn more</a>.</p></details>
+        <details><summary>Who teaches?</summary><p>The program was founded by Yuanzhe Dong, a senior deep-learning engineer at NVIDIA with graduate training in AI and mechanical engineering through Stanford. Every team of four has its own mentor.</p></details>
+      </div>
+      <p style="margin-top:32px;color:var(--ink-3)">Something else? <a href="mailto:hello@genboo.com">hello@genboo.com</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Genboo · Menlo Park, California</span>
+    <nav><a href="program.html">Program</a><a href="apply.html">Apply</a><a href="apply.html#faq">FAQ</a><a href="mailto:hello@genboo.com">hello@genboo.com</a></nav>
+  </div>
+</footer>
+<script src="assets/v2.js"></script>
+<a href="https://humanoid.genboo.com/" style="position:fixed;left:12px;bottom:12px;z-index:9999;font:500 12px/1 system-ui,sans-serif;background:#1f1f1f;color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;opacity:.85">Design concept · not the official Genboo site ↗</a>
+</body>
+</html>

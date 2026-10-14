@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genboo Humanoid — Let’s build a real robot</title>
+<meta name="description" content="An 8-week program in Menlo Park where teams of four high-school students build a real humanoid robot from a box of parts, and learn engineering, code, and AI along the way.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f1efe9;
+  --bg-2: #e7e3da;
+  --ink: #1f1f1f;
+  --ink-2: #5f5c56;
+  --ink-3: #9a968e;
+  --pill: #e2ddd2;
+  /* Taken from the student-built ToddlerBots: orange heads, slate-blue bodies,
+     sage-green leg brackets, rust feet, charcoal servos, a tan nameplate. */
+  --amber: #e2a764;
+  --blue: #4d6fae;
+  --rust: #a5573a;
+  --green: #6f8f5a;
+  --orange: #e8742a;
+  --charcoal: #2a2a2d;
+  --blue-ink: #34558f;
+  --green-ink: #4c6b3b;
+  --rust-ink: #8c4429;
+  --orange-ink: #c4561a;
+  --font: "Outfit", "Google Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161614; --bg-2: #22211e; --ink: #f1efe9; --ink-2: #b9b5ac; --ink-3: #7c786f; --pill: #2c2b27;
+    --blue-ink: #93b0e6; --green-ink: #a6c38f; --rust-ink: #e09a7c; --orange-ink: #f5a26a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161614; --bg-2: #22211e; --ink: #f1efe9; --ink-2: #b9b5ac; --ink-3: #7c786f; --pill: #2c2b27;
+  --blue-ink: #93b0e6; --green-ink: #a6c38f; --rust-ink: #e09a7c; --orange-ink: #f5a26a;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--blue-ink); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { font-weight: 400; letter-spacing: -0.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
+
+/* ---------- nav ---------- */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(16px, 3vw, 32px); transition: background .3s, color .3s; }
+.nav.solid { background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 500; font-size: 1.15rem; letter-spacing: -0.01em; }
+.logo svg { width: 26px; height: 26px; }
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-links a { text-decoration: none; font-size: .95rem; padding: 8px 14px; border-radius: 999px; }
+.nav-links a:not(.pill-btn):hover { background: var(--pill); }
+@media (max-width: 720px) { .nav-links a:not(.pill-btn) { display: none; } }
+
+.pill-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 500 1rem/1 var(--font); padding: 14px 24px; border-radius: 999px; border: 0; cursor: pointer; transition: transform .2s, background .2s; }
+.pill-btn:hover { transform: translateY(-2px); }
+.pill-dark { background: var(--ink); color: var(--bg); }
+.pill-soft { background: var(--pill); color: var(--ink); }
+.pill-white { background: #fff; color: #1f1f1f; }
+.nav .pill-btn { padding: 10px 18px; font-size: .92rem; }
+
+/* ---------- HERO: parts assemble into a robot ---------- */
+.hero { height: 280vh; position: relative; }
+.stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.part { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.part > i { display: block; width: 100%; height: 100%; transform: scale(0); transition: transform .9s cubic-bezier(.3,1.4,.5,1); }
+.loaded .part > i { transform: scale(1); }
+.part svg { display: block; overflow: visible; filter: drop-shadow(0 6px 10px rgba(40, 30, 20, .12)); }
+/* Once assembled, the camera "irises" glow on and off, like the robot is looking around. */
+.alive .iris { animation: iris 3.2s ease-in-out infinite; }
+@keyframes iris { 0%, 100% { fill: #26324a; } 50% { fill: #5d86c9; } }
+
+.hero-copy { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px 40px; pointer-events: none; z-index: 2; }
+.hero-copy > * { pointer-events: auto; }
+.tag { display: inline-flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--pill); border-radius: 999px; padding: 7px 14px; font-size: .9rem; }
+.tag b { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 35%, transparent); }
+.hero h1 { font-size: clamp(3.2rem, 9.5vw, 8.6rem); margin: 24px 0 22px; }
+.hero h1 .grad { background: linear-gradient(90deg, var(--orange-ink), var(--rust-ink) 55%, var(--blue-ink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .lede { font-size: clamp(1.1rem, 1.8vw, 1.45rem); color: var(--ink-2); max-width: 30em; font-weight: 300; }
+.hero .lede strong { color: var(--ink); font-weight: 500; }
+.hero .ctas { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; justify-content: center; }
+.scroll-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: .82rem; color: var(--ink-3); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; }
+.scroll-hint i { width: 22px; height: 34px; border: 1.5px solid var(--ink-3); border-radius: 12px; position: relative; }
+.scroll-hint i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--ink-3); animation: wheel 1.6s infinite; }
+@keyframes wheel { to { transform: translateY(10px); opacity: 0; } }
+
+.hero-mid { position: absolute; left: 50%; top: 50%; z-index: 2; opacity: 0; font-size: clamp(2rem, 5vw, 4.2rem); letter-spacing: -0.03em; white-space: nowrap; background: color-mix(in srgb, var(--bg) 80%, transparent); padding: 6px 22px; border-radius: 999px; }
+@media (max-width: 520px) { .hero-mid { white-space: normal; text-align: center; width: 86vw; border-radius: 28px; } }
+.hero-after { position: absolute; left: 0; right: 0; bottom: 5vh; text-align: center; z-index: 2; opacity: 0; padding: 0 20px; }
+.hero-after h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); }
+.hero-after p { color: var(--ink-2); margin-top: 8px; font-size: clamp(1rem, 1.4vw, 1.2rem); }
+.labels { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.labels span { position: absolute; left: 50%; top: 50%; font-size: .85rem; background: var(--bg); border: 1px solid var(--pill); padding: 6px 12px; border-radius: 999px; white-space: nowrap; opacity: 0; transition: opacity .4s; }
+.labels.on span { opacity: 1; }
+@media (max-width: 720px) { .labels { display: none; } }
+
+/* ---------- WHAT IS IT: scroll-lit statement ---------- */
+.what { padding: clamp(100px, 16vw, 200px) 0 clamp(80px, 12vw, 160px); position: relative; }
+.chips { position: relative; height: 80px; max-width: 520px; margin: 0 auto 30px; }
+.chips span { position: absolute; background: var(--pill); padding: 10px 20px; border-radius: 999px; font-size: 1rem; }
+.kicker { text-align: center; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 22px; font-weight: 500; }
+.statement { font-size: clamp(1.9rem, 4.4vw, 3.6rem); line-height: 1.16; letter-spacing: -0.02em; text-align: center; max-width: 1080px; margin: 0 auto; font-weight: 400; }
+.statement .w { color: color-mix(in srgb, var(--ink) 18%, var(--bg)); transition: color .25s; }
+.statement .w.lit { color: var(--ink); }
+.statement .k1.lit { color: var(--blue-ink); }
+.statement .k2.lit { color: var(--green-ink); }
+.statement .k3.lit { color: var(--rust-ink); }
+.statement .k4.lit { color: var(--orange-ink); }
+.blob { position: absolute; z-index: -1; pointer-events: none; }
+
+/* ---------- WHAT THEY DO: full-bleed carousel ---------- */
+.do-head { text-align: center; margin-bottom: 36px; }
+.do-head h2 { font-size: clamp(2.6rem, 6.5vw, 5.6rem); }
+.do-head p { color: var(--ink-2); margin-top: 14px; font-size: 1.15rem; }
+.carousel { position: relative; height: min(86vh, 820px); min-height: 520px; margin: 0 clamp(8px, 1.5vw, 20px); border-radius: 32px; overflow: hidden; background: #111; color: #fff; }
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease; }
+.slide.on { opacity: 1; }
+.slide img, .slide video { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 6s ease-out; }
+.slide.on img, .slide.on video { transform: scale(1); }
+.slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.05) 35%, rgba(0,0,0,.6) 100%); }
+.slide .cap { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.slide .wk { font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; background: rgba(255,255,255,.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 7px 14px; border-radius: 999px; }
+.slide h3 { font-size: clamp(4rem, 13vw, 10rem); letter-spacing: -0.045em; margin: 16px 0 10px; text-shadow: 0 4px 40px rgba(0,0,0,.25); }
+.slide p { font-size: clamp(1.05rem, 1.8vw, 1.4rem); max-width: 30em; text-shadow: 0 2px 16px rgba(0,0,0,.4); }
+.car-ui { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 3; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.car-btn { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.6); background: rgba(0,0,0,.15); color: #fff; cursor: pointer; display: grid; place-items: center; font-size: 1.1rem; }
+.car-btn:hover { background: rgba(255,255,255,.2); }
+.dots { display: flex; gap: 6px; align-items: center; }
+.dots button { width: 8px; height: 8px; border-radius: 99px; border: 0; padding: 0; background: rgba(255,255,255,.55); cursor: pointer; transition: width .3s; position: relative; overflow: hidden; }
+.dots button.on { width: 56px; background: rgba(255,255,255,.35); }
+.dots button.on::after { content: ""; position: absolute; inset: 0; background: #fff; transform-origin: left; animation: fill var(--dur, 5.5s) linear forwards; }
+.carousel.paused .dots button.on::after { animation-play-state: paused; }
+@keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.steps-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+.steps-row button { font: 400 .95rem var(--font); background: var(--pill); color: var(--ink); border: 0; padding: 9px 16px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; }
+.steps-row button.on { background: var(--ink); color: var(--bg); }
+
+/* ---------- WHAT THEY GAIN ---------- */
+.gain { padding: clamp(110px, 16vw, 200px) 0 clamp(80px, 10vw, 140px); position: relative; overflow: hidden; }
+.gain-bg { position: absolute; left: 50%; top: 32%; width: min(1400px, 140vw); height: 70%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
+.gain .wrap { position: relative; z-index: 1; }
+.gain h2 { text-align: center; font-size: clamp(2.8rem, 7vw, 6rem); }
+.gain h2 .c1 { color: var(--blue-ink); } .gain h2 .c2 { color: var(--green-ink); }
+.gain .sub { text-align: center; color: var(--ink-2); margin: 16px auto 0; max-width: 32em; font-size: 1.15rem; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: clamp(48px, 7vw, 80px); }
+.card { background: var(--bg); border-radius: 28px; overflow: hidden; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 20px 50px -30px rgba(0,0,0,.35); display: flex; flex-direction: column; transition: transform .35s cubic-bezier(.3,1.3,.5,1); }
+.card:hover { transform: translateY(-8px) rotate(-.4deg); }
+.card .art { height: 230px; position: relative; overflow: hidden; }
+.card .art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.card .body { padding: 26px 28px 32px; display: grid; gap: 12px; }
+.card .n { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+.card h3 { font-size: clamp(1.7rem, 2.4vw, 2.1rem); letter-spacing: -0.02em; }
+.card p { color: var(--ink-2); font-weight: 300; }
+.card .meta { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.card .meta span { background: var(--pill); border-radius: 999px; padding: 5px 12px; font-size: .82rem; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr; max-width: 520px; margin-left: auto; margin-right: auto; } }
+
+/* ---------- PROOF ---------- */
+.proof { padding: 0 0 clamp(80px, 12vw, 160px); }
+.proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.p-tile { border-radius: 24px; padding: 26px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: #1f1f1f; transition: transform .3s; }
+a.p-tile:hover { transform: translateY(-4px); }
+.p-tile b { font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 400; letter-spacing: -0.04em; line-height: 1; }
+.p-tile span { font-size: 1rem; }
+.p-tile small { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.p-tile strong { font-weight: 400; font-size: 1.35rem; line-height: 1.2; letter-spacing: -0.01em; }
+.p-wide { grid-column: span 2; }
+@media (max-width: 900px) { .proof-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .p-wide { grid-column: span 2; } .p-tile { min-height: 160px; padding: 20px; } }
+
+/* ---------- FINAL CTA: shapes pile up ---------- */
+.final { position: relative; min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 120px 20px 240px; }
+.final h2 { font-size: clamp(2.6rem, 6.5vw, 5.4rem); position: relative; z-index: 2; }
+.final h2 .c1 { color: var(--orange-ink); } .final h2 .c2 { color: var(--blue-ink); }
+.final p { position: relative; z-index: 2; color: var(--ink-2); margin: 18px auto 0; max-width: 30em; font-size: 1.15rem; }
+.final .ctas { position: relative; z-index: 2; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+.pile { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.pile i { position: absolute; display: block; transform: translateY(-120vh) rotate(var(--r0)); transition: transform 1.2s cubic-bezier(.25,1.25,.45,1); transition-delay: var(--d); }
+.final.in .pile i { transform: translateY(0) rotate(var(--r)); }
+
+.foot { padding: 28px 0 36px; color: var(--ink-3); font-size: .9rem; }
+.foot .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; border-top: 1px solid var(--pill); padding-top: 24px; }
+.foot nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.foot a { text-decoration: none; color: var(--ink-2); }
+.foot a:hover { color: var(--ink); }
+
+.rise { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+.rise.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .part > i, .rise, .pile i, .slide, .slide img, .slide video { transition: none !important; }
+  .rise { opacity: 1; transform: none; }
+  .alive .iris, .scroll-hint i::after, .dots button.on::after { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="logo" href="index.html" aria-label="Genboo Humanoid home">
+    <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="5" width="23" height="16" rx="5.5" fill="var(--orange)"/><circle cx="8.5" cy="13" r="4" fill="#2a2a2d"/><circle cx="17.5" cy="13" r="4" fill="#2a2a2d"/><circle cx="7.6" cy="12" r="1" fill="#fff"/><circle cx="16.6" cy="12" r="1" fill="#fff"/></svg>
+    Genboo Humanoid
+  </a>
+  <nav class="nav-links">
+    <a href="#what">About</a>
+    <a href="#do">What they build</a>
+    <a href="#gain">Why it matters</a>
+    <a class="pill-btn pill-dark" href="../v2/apply.html">Apply</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Introduction">
+    <div class="stage" id="stage">
+      <div class="parts" id="parts" aria-hidden="true"></div>
+      <div class="labels" id="labels" aria-hidden="true">
+        <span data-for="head">Stereo cameras · vision</span>
+        <span data-for="torso">Computer · battery · IMU</span>
+        <span data-for="shL">Servo motors · torque</span>
+        <span data-for="shinR">Control · balance</span>
+      </div>
+
+      <div class="hero-copy" id="heroCopy">
+        <span class="tag"><b></b>Cohort 03 · Now accepting applications</span>
+        <h1>Let’s build a<br><span class="grad">real robot.</span></h1>
+        <p class="lede">An 8-week program in Menlo Park. <strong>Four high-schoolers. One humanoid. From a box of parts</strong> to a robot that moves, and every subject it takes on the way.</p>
+        <div class="ctas">
+          <a class="pill-btn pill-dark" href="../v2/apply.html">Apply for Cohort 03</a>
+          <a class="pill-btn pill-soft" href="#do">See what they build</a>
+        </div>
+      </div>
+
+      <div class="hero-mid" id="heroMid" aria-hidden="true">It starts as a box of parts…</div>
+      <div class="hero-after" id="heroAfter">
+        <h2>This is what we will build together.</h2>
+        <p>Every part above is a different subject. Together, they make one robot.</p>
+      </div>
+      <div class="scroll-hint" id="hint"><i></i>Scroll to assemble</div>
+    </div>
+  </section>
+
+  <!-- WHAT IS IT -->
+  <section class="what" id="what">
+    <div class="wrap">
+      <div class="chips rise" aria-hidden="true">
+        <span style="left:2%;top:30px;transform:rotate(-12deg)">Build</span>
+        <span style="left:24%;top:2px;transform:rotate(8deg);background:var(--amber);color:#1f1f1f">Wire</span>
+        <span style="left:44%;top:34px;transform:rotate(-4deg)">Code</span>
+        <span style="left:63%;top:4px;transform:rotate(14deg);background:var(--rust);color:#fff">AI</span>
+        <span style="left:80%;top:30px;transform:rotate(-8deg)">Team</span>
+      </div>
+      <div class="kicker">What is Genboo Humanoid?</div>
+      <p class="statement" id="statement">A hands-on program where <span class="k1">teams of four high-school students</span> build a <span class="k2">real humanoid robot</span> from scratch in eight weeks, and learn <span class="k3">mechanics, electronics, code, and AI</span> not from a textbook, but because <span class="k4">the robot needs them.</span></p>
+    </div>
+  </section>
+
+  <!-- WHAT THEY DO -->
+  <section id="do" style="padding-bottom:clamp(40px,6vw,80px)">
+    <div class="wrap do-head rise">
+      <h2>Eight weeks. Six verbs.</h2>
+      <p>What we’ll actually do, week by week.</p>
+    </div>
+    <div class="carousel" id="carousel" aria-roledescription="carousel">
+      <div class="slide on" data-label="Build">
+        <img src="https://humanoid.genboo.com/assets/img/student-assembly-hands-1200.webp" alt="Hands assembling the torso and arm actuators of a humanoid robot">
+        <div class="cap"><span class="wk">Weeks 1–3</span><h3>Build</h3><p>Assemble a humanoid from 3D-printed parts and servo motors, one limb at a time.</p></div>
+      </div>
+      <div class="slide" data-label="Wire">
+        <img src="https://humanoid.genboo.com/assets/img/student-soldering-1200.webp" alt="A student soldering wires at an electronics bench" loading="lazy">
+        <div class="cap"><span class="wk">Week 4</span><h3>Wire</h3><p>Power, an onboard computer, sensors. Every connection checked before the first power-on.</p></div>
+      </div>
+      <div class="slide" data-label="Code">
+        <img src="https://humanoid.genboo.com/assets/img/students-testing-team-1200.webp" alt="Students running code on a laptop next to two robots" loading="lazy">
+        <div class="cap"><span class="wk">Weeks 5–6</span><h3>Code</h3><p>Calibrate every joint, then write the first program: move joint 3 by 10 degrees, and explain why it doesn’t land exactly there.</p></div>
+      </div>
+      <div class="slide" data-label="Simulate">
+        <img src="https://humanoid.genboo.com/assets/img/sim-parallel-training-1880.webp" alt="Dozens of simulated robots training in parallel" loading="lazy">
+        <div class="cap"><span class="wk">Week 7</span><h3>Simulate</h3><p>Rebuild the robot in the MuJoCo physics simulator. Run the same motion in both worlds and compare.</p></div>
+      </div>
+      <div class="slide" data-label="Learn">
+        <video src="https://humanoid.genboo.com/assets/videos/sim-walk.mp4" poster="https://humanoid.genboo.com/assets/img/sim-walk-poster.webp" muted loop playsinline preload="none"></video>
+        <div class="cap"><span class="wk">Week 8</span><h3>Learn</h3><p>A first taste of reinforcement learning: change one reward, and watch the robot behave differently.</p></div>
+      </div>
+      <div class="slide" data-label="Show">
+        <img src="https://humanoid.genboo.com/assets/img/students-celebrate-1200.webp" alt="Students and their teacher high-fiving after a successful test" loading="lazy">
+        <div class="cap"><span class="wk">Showcase</span><h3>Show</h3><p>Demo the robot as a team, and explain what worked, what didn’t, and why.</p></div>
+      </div>
+      <div class="car-ui">
+        <button class="car-btn" id="prev" aria-label="Previous">←</button>
+        <div class="dots" id="dots"></div>
+        <button class="car-btn" id="next" aria-label="Next">→</button>
+      </div>
+    </div>
+    <div class="steps-row" id="stepsRow"></div>
+  </section>
+
+  <!-- WHAT THEY GAIN -->
+  <section class="gain" id="gain">
+    <svg class="gain-bg" viewBox="0 0 1400 600" preserveAspectRatio="none" aria-hidden="true">
+      <circle cx="140" cy="300" r="240" fill="var(--blue)" opacity=".85"/>
+      <rect x="980" y="40" width="460" height="460" rx="120" fill="var(--green)" opacity=".85" transform="rotate(12 1210 270)"/>
+    </svg>
+    <div class="wrap">
+      <h2 class="rise">What they <span class="c1">walk away</span> <span class="c2">with</span></h2>
+      <p class="sub rise">The robot is the vehicle. These three things are the point.</p>
+      <div class="cards">
+        <article class="card rise">
+          <div class="art" style="background:var(--amber)" aria-hidden="true">
+            <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice">
+              <rect x="40" y="120" width="90" height="70" rx="10" fill="#fff" opacity=".9"/><path d="M40 120 l18 -22 h90 l-18 22" fill="none" stroke="#1f1f1f" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M150 155 H220" stroke="#1f1f1f" stroke-width="3" stroke-dasharray="6 8" stroke-linecap="round"/><path d="M214 146 l10 9 -10 9" fill="none" stroke="#1f1f1f" stroke-width="3" stroke-linecap="round"/>
+              <rect x="256" y="40" width="96" height="60" rx="18" fill="var(--orange)"/><circle cx="282" cy="71" r="14" fill="#2a2a2d"/><circle cx="326" cy="71" r="14" fill="#2a2a2d"/><circle cx="278" cy="67" r="3" fill="#fff"/><circle cx="322" cy="67" r="3" fill="#fff"/>
+              <rect x="266" y="106" width="76" height="62" rx="8" fill="var(--blue)"/><rect x="278" y="120" width="52" height="18" rx="2" fill="#2a2a2d"/><rect x="276" y="172" width="22" height="40" rx="5" fill="var(--green)"/><rect x="310" y="172" width="22" height="40" rx="5" fill="var(--green)"/><rect x="272" y="212" width="30" height="10" rx="5" fill="var(--rust)"/><rect x="306" y="212" width="30" height="10" rx="5" fill="var(--rust)"/>
+            </svg>
+          </div>
+          <div class="body">
+            <span class="n">01 · Ownership</span>
+            <h3>A project of their own</h3>
+            <p>Most schoolwork is neither a project nor theirs. Here they take something from nothing to working, and own every failure and fix along the way. Once you’ve gone from zero to one, you know you can do it again.</p>
+            <div class="meta"><span>Zero → one</span><span>Problem solving</span><span>Grit</span></div>
+          </div>
+        </article>
+        <article class="card rise">
+          <div class="art" style="background:var(--rust)" aria-hidden="true">
+            <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice">
+              <path d="M30 200 C 120 196, 170 170, 210 130 S 300 40, 380 30" fill="none" stroke="#1f1f1f" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="80" cy="196" r="20" fill="var(--orange)"/><circle cx="170" cy="168" r="22" fill="var(--amber)"/><circle cx="250" cy="96" r="24" fill="var(--blue)"/><circle cx="335" cy="44" r="26" fill="var(--green)"/>
+              <text x="80" y="201" text-anchor="middle" font-family="Outfit, sans-serif" font-size="13" fill="#1f1f1f">ME</text>
+              <text x="170" y="173" text-anchor="middle" font-family="Outfit, sans-serif" font-size="13" fill="#1f1f1f">EE</text>
+              <text x="250" y="101" text-anchor="middle" font-family="Outfit, sans-serif" font-size="13" fill="#1f1f1f">CS</text>
+              <text x="335" y="49" text-anchor="middle" font-family="Outfit, sans-serif" font-size="13" fill="#1f1f1f">AI</text>
+            </svg>
+          </div>
+          <div class="body">
+            <span class="n">02 · Curiosity</span>
+            <h3>Interest that teaches itself</h3>
+            <p>In the AI era, information is everywhere. Wanting to learn is what’s rare. Nobody has to assign the reading on torque when the robot’s knee keeps buckling. That pull is what powers everything you go on to teach yourself.</p>
+            <div class="meta"><span>Mechanics</span><span>Electronics</span><span>Code</span><span>AI</span></div>
+          </div>
+        </article>
+        <article class="card rise">
+          <div class="art" style="background:var(--green)" aria-hidden="true">
+            <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice">
+              <rect x="160" y="70" width="80" height="80" rx="20" fill="#fff"/><circle cx="185" cy="105" r="7" fill="#1f1f1f"/><circle cx="215" cy="105" r="7" fill="#1f1f1f"/>
+              <circle cx="80" cy="60" r="26" fill="var(--amber)"/><circle cx="320" cy="60" r="26" fill="var(--blue)"/><circle cx="80" cy="170" r="26" fill="var(--rust)"/><circle cx="320" cy="170" r="26" fill="var(--orange)"/>
+              <path d="M104 70 L158 96 M296 70 L242 96 M104 160 L158 132 M296 160 L242 132" stroke="#1f1f1f" stroke-width="3" stroke-dasharray="5 7" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="body">
+            <span class="n">03 · Teamwork</span>
+            <h3>Four people, one robot</h3>
+            <p>No one builds a humanoid alone. Teams split into sub-teams, rotate between operating and checking, and debug together, the way real engineering teams do. Each student still keeps their own notebook.</p>
+            <div class="meta"><span>Collaboration</span><span>Communication</span><span>Presenting</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="proof">
+    <div class="wrap proof-grid">
+      <div class="p-tile rise" style="background:var(--amber)"><small>Format</small><div><b>8</b><span> weeks · 3 hrs each</span></div></div>
+      <div class="p-tile rise" style="background:var(--rust);color:#fff"><small>Team</small><div><b>4</b><span> students per robot</span></div></div>
+      <div class="p-tile rise" style="background:var(--green);color:#fff"><small>Mentors</small><div><b>1:4</b><span> one per team</span></div></div>
+      <div class="p-tile rise" style="background:var(--orange);color:#fff"><small>Prereqs</small><div><b>0</b><span> robotics experience</span></div></div>
+      <a class="p-tile p-wide rise" style="background:var(--blue);color:#fff" href="https://arxiv.org/abs/2609.25674" target="_blank" rel="noopener"><small>Peer-reviewed ↗</small><strong>Our curriculum paper was accepted at IEEE TALE 2026.</strong></a>
+      <a class="p-tile p-wide rise" style="background:var(--bg-2);color:var(--ink)" href="https://online.stanford.edu/learner-stories/sharing-his-passion-robotics-next-generation" target="_blank" rel="noopener"><small>The founder ↗</small><strong>Started by an NVIDIA AI engineer and parent, building on ToddlerBot, an open-source humanoid from Stanford researchers.</strong></a>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final" id="final">
+    <div class="pile" aria-hidden="true">
+      <i style="left:4%;bottom:-40px;width:220px;height:220px;border-radius:50%;background:var(--blue);--r0:-30deg;--r:0deg;--d:.05s"></i>
+      <i style="left:18%;bottom:-20px;width:170px;height:170px;border-radius:36px;background:var(--rust);--r0:40deg;--r:-8deg;--d:.25s"></i>
+      <i style="left:33%;bottom:-70px;width:200px;height:200px;border-radius:44px;background:var(--green);--r0:-50deg;--r:6deg;--d:.15s"></i>
+      <i style="left:52%;bottom:-30px;width:150px;height:240px;border-radius:999px;background:var(--amber);--r0:60deg;--r:-14deg;--d:.35s"></i>
+      <i style="left:66%;bottom:-50px;width:210px;height:210px;border-radius:50%;background:var(--orange);--r0:-20deg;--r:0deg;--d:.1s"></i>
+      <i style="left:82%;bottom:-10px;width:190px;height:150px;border-radius:40px;background:var(--blue);--r0:30deg;--r:10deg;--d:.3s"></i>
+    </div>
+    <div>
+      <h2 class="rise">Cohort 03 is <span class="c1">open.</span><br>Let them <span class="c2">build.</span></h2>
+      <p class="rise">Grades 9–12 · No experience needed · Need-based scholarships · Parents can apply on a student’s behalf.</p>
+      <div class="ctas rise">
+        <a class="pill-btn pill-dark" href="../v2/apply.html">Apply for Cohort 03</a>
+        <a class="pill-btn pill-soft" href="../v2/program.html">See the full program</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 Genboo · Menlo Park, California</span>
+    <nav><a href="../v2/index.html#story">Our story</a><a href="../v2/program.html">Program</a><a href="../v2/apply.html">Apply</a><a href="mailto:hello@genboo.com">hello@genboo.com</a></nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var ease = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+
+  /* ---------- hero: scattered parts assemble into a ToddlerBot-style humanoid ----------
+     Each part is drawn as the real component it stands for (servo, bracket, camera…).
+     a = assembled position in robot units (centre-relative); s = scattered [x, y] as a fraction of the viewport, then rotation and scale.
+     Array order is paint order: later parts sit on top. */
+  var P = [
+    { id: "footL",  t: "foot",    w: 86,  h: 30,  a: [-46, 277, 0],  s: [-.40, -.24, 34, 1.9] },
+    { id: "footR",  t: "foot",    w: 86,  h: 30,  a: [46, 277, 0],   s: [.10, -.48, -18, 1.7] },
+    { id: "shinL",  t: "stack",   w: 50,  h: 88,  a: [-40, 216, 0],  s: [-.26, .44, 70, 1.7] },
+    { id: "shinR",  t: "stack",   w: 50,  h: 88,  a: [40, 216, 0],   s: [.48, -.20, -30, 1.7] },
+    { id: "kneeL",  t: "servo",   w: 54,  h: 42,  a: [-40, 152, 0],  s: [-.45, .14, 15, 1.6] },
+    { id: "kneeR",  t: "servo",   w: 54,  h: 42,  a: [40, 152, 0],   s: [.26, .48, 30, 1.6] },
+    { id: "thighL", t: "bracket", c: "var(--green)", w: 54, h: 92, a: [-40, 86, 0], s: [-.30, -.47, 60, 1.8] },
+    { id: "thighR", t: "bracket", c: "var(--green)", w: 54, h: 92, a: [40, 86, 0],  s: [.38, .20, -50, 1.7] },
+    { id: "hip",    t: "hip",     w: 140, h: 36,  a: [0, 26, 0],     s: [.02, .50, -8, 1.8] },
+    { id: "handL",  t: "paddle",  w: 58,  h: 80,  a: [-134, 72, 6],  s: [-.47, -.40, 30, 1.8] },
+    { id: "handR",  t: "paddle",  w: 58,  h: 80,  a: [134, 72, -6],  s: [.47, .38, -24, 1.8] },
+    { id: "elbowL", t: "servo",   w: 46,  h: 40,  a: [-126, 8, 0],   s: [-.14, .48, 10, 1.7] },
+    { id: "elbowR", t: "servo",   w: 46,  h: 40,  a: [126, 8, 0],    s: [.18, -.44, -20, 1.6] },
+    { id: "armL",   t: "bracket", c: "var(--blue)", w: 40, h: 84, a: [-124, -52, 0], s: [-.38, .46, -40, 1.8] },
+    { id: "armR",   t: "bracket", c: "var(--blue)", w: 40, h: 84, a: [124, -52, 0],  s: [.44, -.44, 30, 1.7] },
+    { id: "torso",  t: "torso",   w: 180, h: 150, a: [0, -70, 0],    s: [.48, .04, 16, 1.9] },
+    { id: "shL",    t: "servo",   w: 52,  h: 50,  a: [-116, -118, 0], s: [-.46, -.08, 20, 1.8] },
+    { id: "shR",    t: "servo",   w: 52,  h: 50,  a: [116, -118, 0],  s: [.32, .45, -15, 1.8] },
+    { id: "neck",   t: "servo",   w: 40,  h: 30,  a: [0, -158, 0],   s: [.08, -.46, 25, 2.0] },
+    { id: "head",   t: "head",    w: 200, h: 120, a: [0, -230, 0],   s: [-.22, -.42, -12, 2.0] },
+    { id: "lensL",  t: "lens",    w: 62,  h: 62,  a: [-46, -228, 0], s: [-.44, .36, 0, 1.6], eye: 1 },
+    { id: "lensR",  t: "lens",    w: 62,  h: 62,  a: [46, -228, 0],  s: [.38, -.30, 0, 1.6], eye: 1 }
+  ];
+
+  // SVG for each component type, drawn in a w × h box.
+  function draw(q) {
+    var w = q.w, h = q.h, C = "#2a2a2d", C2 = "#3b3b40", M = "#5c5c63", S = "#77777f", o = "";
+    function screws(inset) {
+      return [[inset, inset], [w - inset, inset], [inset, h - inset], [w - inset, h - inset]]
+        .map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2" fill="' + S + '"/>'; }).join("");
+    }
+    function servo(y0, hh) {
+      var r = Math.min(w, hh) * 0.2;
+      return '<rect x="1" y="' + (y0 + 1) + '" width="' + (w - 2) + '" height="' + (hh - 2) + '" rx="6" fill="' + C + '"/>' +
+        '<rect x="4" y="' + (y0 + 4) + '" width="' + (w - 8) + '" height="' + (hh * 0.24) + '" rx="3" fill="' + C2 + '"/>' +
+        '<circle cx="' + w / 2 + '" cy="' + (y0 + hh * 0.6) + '" r="' + r + '" fill="' + M + '"/>' +
+        '<circle cx="' + w / 2 + '" cy="' + (y0 + hh * 0.6) + '" r="' + r * 0.42 + '" fill="' + C + '"/>';
+    }
+    switch (q.t) {
+      case "servo": o = servo(0, h) + screws(5); break;
+      case "stack": o = servo(0, h / 2) + servo(h / 2, h / 2) +
+        '<rect x="' + (w * .18) + '" y="' + (h * .44) + '" width="' + (w * .64) + '" height="' + (h * .12) + '" rx="2" fill="var(--green)"/>'; break;
+      case "hip": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="8" fill="' + C + '"/>' +
+        '<circle cx="' + w * .29 + '" cy="' + h / 2 + '" r="9" fill="' + M + '"/><circle cx="' + w * .71 + '" cy="' + h / 2 + '" r="9" fill="' + M + '"/>' +
+        '<circle cx="' + w * .29 + '" cy="' + h / 2 + '" r="4" fill="' + C + '"/><circle cx="' + w * .71 + '" cy="' + h / 2 + '" r="4" fill="' + C + '"/>' + screws(6); break;
+      case "bracket": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="8" fill="' + q.c + '"/>' +
+        '<rect x="' + w * .22 + '" y="' + h * .2 + '" width="' + w * .56 + '" height="' + h * .6 + '" rx="5" fill="#000" opacity=".22"/>' +
+        '<circle cx="' + w / 2 + '" cy="' + h * .1 + '" r="2.6" fill="#000" opacity=".35"/><circle cx="' + w / 2 + '" cy="' + h * .9 + '" r="2.6" fill="#000" opacity=".35"/>'; break;
+      case "paddle": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="6" fill="#1f1f22"/>' +
+        '<rect x="6" y="6" width="' + (w - 12) + '" height="' + (h - 12) + '" rx="3" fill="none" stroke="' + C2 + '" stroke-width="2"/>'; break;
+      case "foot": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="12" fill="var(--rust)"/>' +
+        '<rect x="6" y="' + (h - 9) + '" width="' + (w - 12) + '" height="5" rx="2.5" fill="#000" opacity=".25"/>'; break;
+      case "torso": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="14" fill="var(--blue)"/>' +
+        '<rect x="7" y="7" width="' + (w - 14) + '" height="' + (h - 14) + '" rx="9" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="2"/>' +
+        '<rect x="22" y="38" width="' + (w - 44) + '" height="58" rx="4" fill="' + C + '"/>' +
+        '<text x="' + w / 2 + '" y="74" text-anchor="middle" font-family="Outfit, sans-serif" font-size="22" letter-spacing="3" fill="#f1efe9">GENBOO</text>' +
+        '<rect x="' + (w / 2 - 14) + '" y="108" width="28" height="18" rx="3" fill="#000" opacity=".22"/>' + screws(14); break;
+      case "head": o = '<rect x="1" y="1" width="' + (w - 2) + '" height="' + (h - 2) + '" rx="34" fill="var(--orange)"/>' +
+        '<rect x="20" y="8" width="' + (w - 40) + '" height="10" rx="5" fill="#fff" opacity=".18"/>' +
+        '<circle cx="' + (w / 2 - 46) + '" cy="' + (h / 2 + 2) + '" r="36" fill="#000" opacity=".16"/>' +
+        '<circle cx="' + (w / 2 + 46) + '" cy="' + (h / 2 + 2) + '" r="36" fill="#000" opacity=".16"/>'; break;
+      case "lens": var r = w / 2; o =
+        '<circle cx="' + r + '" cy="' + r + '" r="' + (r - 1) + '" fill="' + C + '"/>' +
+        '<circle cx="' + r + '" cy="' + r + '" r="' + r * .74 + '" fill="none" stroke="' + M + '" stroke-width="3"/>' +
+        '<circle cx="' + r + '" cy="' + r + '" r="' + r * .52 + '" fill="#111114"/>' +
+        '<circle class="iris" cx="' + r + '" cy="' + r + '" r="' + r * .28 + '" fill="#26324a"/>' +
+        '<circle cx="' + r * .72 + '" cy="' + r * .7 + '" r="' + r * .12 + '" fill="#fff" opacity=".85"/>'; break;
+    }
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="100%" preserveAspectRatio="none">' + o + '</svg>';
+  }
+  var hero = document.getElementById("hero"), stage = document.getElementById("stage");
+  var holder = document.getElementById("parts"), copy = document.getElementById("heroCopy");
+  var after = document.getElementById("heroAfter"), hint = document.getElementById("hint");
+  var labels = document.getElementById("labels"), nav = document.getElementById("nav");
+  var els = {};
+  P.forEach(function (p, i) {
+    var d = document.createElement("div");
+    d.className = "part" + (p.eye ? " eye" : "");
+    var inner = document.createElement("i");
+    inner.innerHTML = draw(p);
+    inner.style.transitionDelay = (i * 0.035) + "s";
+    d.appendChild(inner); holder.appendChild(d); els[p.id] = d;
+  });
+  requestAnimationFrame(function () { stage.classList.add("loaded"); });
+
+  var labelMap = { head: [118, -10], torso: [180, 10], shL: [-38, 0], shinR: [44, 0] };
+  var mid = document.getElementById("heroMid");
+  function frame() {
+    var vw = innerWidth, vh = innerHeight;
+    var k = Math.min(vw / 400, vh / 760) * 0.8;
+    var span = hero.offsetHeight - vh;
+    var p = clamp(-hero.getBoundingClientRect().top / span, 0, 1);
+    var oy = -vh * 0.07;
+    var m = clamp(1 - Math.abs(p - 0.36) / 0.13, 0, 1);
+    mid.style.opacity = m;
+    mid.style.transform = "translate(-50%,-50%) scale(" + (0.94 + m * 0.06) + ")";
+    P.forEach(function (q, i) {
+      var t = ease(clamp((p - 0.06 - i * 0.008) / 0.5, 0, 1));
+      var x = lerp(q.s[0] * vw, q.a[0] * k, t);
+      var y = lerp(q.s[1] * vh, q.a[1] * k + oy, t);
+      var rot = lerp(q.s[2], q.a[2], t);
+      // Small screens: keep the scattered shapes big enough to read as a playful backdrop.
+      var sc = lerp(q.s[3] * Math.max(1, 0.55 / k), 1, t);
+      var el = els[q.id];
+      el.style.width = q.w * k + "px"; el.style.height = q.h * k + "px";
+      el.style.transform = "translate(-50%,-50%) translate(" + x + "px," + y + "px) rotate(" + rot + "deg) scale(" + sc + ")";
+    });
+    var c = clamp(p / 0.22, 0, 1);
+    copy.style.opacity = 1 - c;
+    copy.style.transform = "translateY(" + (-c * 80) + "px)";
+    copy.style.visibility = c >= 1 ? "hidden" : "visible";
+    hint.style.opacity = 1 - clamp(p / 0.05, 0, 1);
+    after.style.opacity = clamp((p - 0.7) / 0.14, 0, 1);
+    after.style.transform = "translateY(" + (1 - clamp((p - 0.7) / 0.14, 0, 1)) * 24 + "px)";
+    stage.classList.toggle("alive", p > 0.66);
+    labels.classList.toggle("on", p > 0.7 && p < 0.98);
+    labels.querySelectorAll("span").forEach(function (s) {
+      var a = P.filter(function (q) { return q.id === s.dataset.for; })[0], off = labelMap[s.dataset.for];
+      var x = (a.a[0] + off[0]) * k, y = (a.a[1] + off[1]) * k + oy;
+      s.style.transform = "translate(" + (off[0] < 0 ? "-100%" : "0") + ",-50%) translate(" + x + "px," + y + "px)";
+    });
+    nav.classList.toggle("solid", scrollY > hero.offsetHeight - vh * 1.1);
+    lightStatement();
+  }
+
+  /* ---------- statement lights up word by word ---------- */
+  var st = document.getElementById("statement"), words = [];
+  (function split(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          var s = document.createElement("span");
+          s.className = "w" + (node !== st ? " " + node.className : "");
+          s.textContent = part; frag.appendChild(s); words.push(s);
+        });
+        node.replaceChild(frag, n);
+      } else if (n.nodeType === 1) split(n);
+    });
+  })(st);
+  function lightStatement() {
+    var r = st.getBoundingClientRect();
+    var t = clamp((innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.35), 0, 1);
+    var n = reduce ? words.length : Math.round(t * words.length * 1.1);
+    words.forEach(function (w, i) { w.classList.toggle("lit", i < n); });
+  }
+
+  var ticking = false;
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { frame(); ticking = false; }); } }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  frame();
+
+  /* ---------- carousel ---------- */
+  var car = document.getElementById("carousel"), slides = car.querySelectorAll(".slide");
+  var dots = document.getElementById("dots"), row = document.getElementById("stepsRow");
+  var cur = 0, timer = null, DUR = 5500;
+  slides.forEach(function (s, i) {
+    var b = document.createElement("button"); b.setAttribute("aria-label", "Show " + s.dataset.label);
+    b.onclick = function () { go(i, true); }; dots.appendChild(b);
+    var c = document.createElement("button"); c.textContent = s.dataset.label;
+    c.onclick = function () { go(i, true); }; row.appendChild(c);
+  });
+  function go(i, user) {
+    cur = (i + slides.length) % slides.length;
+    slides.forEach(function (s, j) {
+      s.classList.toggle("on", j === cur);
+      var v = s.querySelector("video");
+      if (v) { if (j === cur) { v.play().catch(function () {}); } else v.pause(); }
+    });
+    [dots, row].forEach(function (g) { Array.prototype.forEach.call(g.children, function (b, j) { b.classList.toggle("on", j === cur); }); });
+    var on = dots.children[cur]; on.classList.remove("on"); void on.offsetWidth; on.classList.add("on");
+    clearTimeout(timer);
+    if (!reduce) timer = setTimeout(function () { go(cur + 1); }, DUR);
+  }
+  document.getElementById("prev").onclick = function () { go(cur - 1, true); };
+  document.getElementById("next").onclick = function () { go(cur + 1, true); };
+  car.addEventListener("mouseenter", function () { car.classList.add("paused"); clearTimeout(timer); });
+  car.addEventListener("mouseleave", function () { car.classList.remove("paused"); go(cur); });
+  dots.style.setProperty("--dur", DUR / 1000 + "s");
+  go(0);
+
+  /* ---------- reveal on scroll ---------- */
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -12% 0px" });
+  document.querySelectorAll(".rise, .final").forEach(function (el) { io.observe(el); });
+})();
+</script>
+<a href="https://humanoid.genboo.com/" style="position:fixed;left:12px;bottom:12px;z-index:9999;font:500 12px/1 system-ui,sans-serif;background:#1f1f1f;color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;opacity:.85">Design concept · not the official Genboo site ↗</a>
+</body>
+</html>

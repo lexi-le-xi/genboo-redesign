@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genboo Redesign Concepts</title>
+<meta name="description" content="Two homepage design concepts for the Genboo Humanoid program.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #f2efea; --card: #fffdf9; --ink: #1f1f1f; --ink-2: #5f5c56; --line: #e2ddd2; --orange: #e8742a; --blue: #4d6fae; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #161614; --card: #201f1c; --ink: #f1efe9; --ink-2: #b9b5ac; --line: #2c2b27; }
+}
+:root[data-theme="dark"] { --bg: #161614; --card: #201f1c; --ink: #f1efe9; --ink-2: #b9b5ac; --line: #2c2b27; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Outfit", system-ui, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px 16px; }
+main { max-width: 880px; width: 100%; }
+h1 { font-weight: 400; font-size: clamp(2.2rem, 6vw, 3.6rem); letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 14px; }
+p.lede { color: var(--ink-2); font-size: 1.15rem; margin: 0 0 40px; max-width: 34em; line-height: 1.5; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+a.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 26px; text-decoration: none; color: inherit; transition: transform .2s, border-color .2s; }
+a.card:hover { transform: translateY(-4px); border-color: var(--ink-2); }
+.k { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.card h2 { font-weight: 400; font-size: 1.7rem; letter-spacing: -0.02em; margin: 10px 0 8px; }
+.card p { margin: 0; color: var(--ink-2); line-height: 1.5; }
+.swatch { display: flex; gap: 6px; margin-top: 18px; }
+.swatch i { width: 22px; height: 22px; border-radius: 6px; display: block; }
+.note { margin-top: 32px; font-size: .9rem; color: var(--ink-2); }
+.note a { color: inherit; }
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Genboo Humanoid<br>redesign concepts</h1>
+  <p class="lede">Two directions for a new homepage. Both are design previews, not the official site.</p>
+  <div class="grid">
+    <a class="card" href="v2/">
+      <span class="k">Concept A · Editorial</span>
+      <h2>When students build a robot</h2>
+      <p>A calm, story-led page. Scroll through the build as a robot diagram gains one engineering layer at a time.</p>
+      <div class="swatch"><i style="background:#faf9f5;border:1px solid #e2ddd2"></i><i style="background:#d97757"></i><i style="background:#788c5d"></i><i style="background:#6a9bcc"></i><i style="background:#141413"></i></div>
+    </a>
+    <a class="card" href="v3/">
+      <span class="k">Concept B · Playful</span>
+      <h2>Let’s build a real robot</h2>
+      <p>A bold, animated page. Scattered parts fly together into a ToddlerBot-style humanoid as you scroll.</p>
+      <div class="swatch"><i style="background:#e8742a"></i><i style="background:#4d6fae"></i><i style="background:#6f8f5a"></i><i style="background:#a5573a"></i><i style="background:#2a2a2d"></i></div>
+    </a>
+  </div>
+  <p class="note">The official program site is <a href="https://humanoid.genboo.com/">humanoid.genboo.com</a>.</p>
+</main>
+</body>
+</html>

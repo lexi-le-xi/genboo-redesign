@@ -1,0 +1,4 @@
+# First draft stays local (still uses "kid" wording); only v2 and v3 are published.
+v1/
+.claude/
+.DS_Store
